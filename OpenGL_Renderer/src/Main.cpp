@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+// C++ macros for debugging opengl
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define Call(x) GetErrors();\
 	x;\
@@ -134,6 +135,8 @@ int main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	glfwSwapInterval(1);
+
 	if (glewInit() != GLEW_OK)
 		return -1;
 	else
@@ -176,16 +179,29 @@ int main(void)
 	unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
 	Call(glUseProgram(shader));
 
+	Call(int location = glGetUniformLocation(shader, "uColor"));
+	ASSERT(location != -1);
+	Call(glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f));
+
+	float r = 0.0f;
+	float increment = 0.5f;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
 		Call(glClear(GL_COLOR_BUFFER_BIT));
 
+		Call(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
 		// NOTE: if not appearing correctly, check for possible GL_INT
 		// instead of GL_UNSIGNED_INT
 		Call(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
+		if (r > 1.0f)
+			increment = -0.05f;
+		else if (r < 0.05f)
+			increment = 0.05f;
+
+		r += increment;
 
 		/* Swap front and back buffers */
 		Call(glfwSwapBuffers(window));
