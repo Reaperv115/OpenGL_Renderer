@@ -5,11 +5,9 @@
 #include <fstream>
 #include <sstream>
 
-// C++ macros for debugging opengl
-#define ASSERT(x) if (!(x)) __debugbreak();
-#define Call(x) GetErrors();\
-	x;\
-	ASSERT(LogCall(#x, __FILE__, __LINE__))
+#include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 #pragma region Shaders
 struct ShaderProgramSource
@@ -125,7 +123,7 @@ int main(void)
 	
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(640, 480, "2D Engine", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -155,25 +153,22 @@ int main(void)
 		0, 1, 2,
 		2, 3, 0
 	};
+	unsigned int vao;
+	Call(glGenVertexArrays(1, &vao));
+	Call(glBindVertexArray(vao));
 
 	// creating and binding a vertex buffer
-	unsigned int buffer;
-	Call(glGenBuffers(1, &buffer));
-	Call(glBindBuffer(GL_ARRAY_BUFFER, buffer));
-	Call(glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), triangle, GL_STATIC_DRAW));
+	VertexBuffer vb(triangle, 4 * 2 * sizeof(float));
 	
 	// enabling vertex buffer
 	Call(glEnableVertexAttribArray(0));
 	Call(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
 
 	// creating and binding index buffer
-	unsigned int ibo;
-	Call(glGenBuffers(1, &ibo));
-	Call(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-	Call(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW));
+	IndexBuffer ib(indices, 6);
 
 	// reading in shader file
-	ShaderProgramSource source = ParseShader("src/Basic.glsl");
+	ShaderProgramSource source = ParseShader("src/Shaders/Basic.glsl");
 
 	// using shaders
 	unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
@@ -192,8 +187,10 @@ int main(void)
 		Call(glClear(GL_COLOR_BUFFER_BIT));
 
 		Call(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
-		// NOTE: if not appearing correctly, check for possible GL_INT
-		// instead of GL_UNSIGNED_INT
+		
+		Call(glBindVertexArray(vao));
+		ib.Bind();
+
 		Call(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 		if (r > 1.0f)
