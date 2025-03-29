@@ -8,6 +8,7 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 #pragma region Shaders
 struct ShaderProgramSource
@@ -157,12 +158,14 @@ int main(void)
 	Call(glGenVertexArrays(1, &vao));
 	Call(glBindVertexArray(vao));
 
+	VertexArray va;
 	// creating and binding a vertex buffer
 	VertexBuffer vb(triangle, 4 * 2 * sizeof(float));
+
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	va.AddBuffer(vb, layout);
 	
-	// enabling vertex buffer
-	Call(glEnableVertexAttribArray(0));
-	Call(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
 
 	// creating and binding index buffer
 	IndexBuffer ib(indices, 6);
@@ -188,7 +191,7 @@ int main(void)
 
 		Call(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
 		
-		Call(glBindVertexArray(vao));
+		va.Bind();
 		ib.Bind();
 
 		Call(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
