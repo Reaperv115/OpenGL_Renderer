@@ -2,10 +2,14 @@
 #version 410 core
 
 layout(location = 0) in vec4 position;
+layout(location = 1) in vec2 texCoord;
+
+out vec2 vtexCoord;
 
 void main()
 {
 	gl_Position = position;
+	vtexCoord = texCoord;
 }
 
 #shader fragment
@@ -13,9 +17,13 @@ void main()
 
 layout(location = 0) out vec4 color;
 
+in vec2 vtexCoord;
+
 uniform vec4 uColor;
+uniform sampler2D uTexture;
 
 void main()
 {
-	color = uColor;
+	vec4 texColor = texture(uTexture, vtexCoord);
+	color = texColor;
 }
