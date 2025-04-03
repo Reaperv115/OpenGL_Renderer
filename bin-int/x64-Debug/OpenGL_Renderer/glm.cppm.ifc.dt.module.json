@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.obj",
+            "outputs": [
+                "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.cppm.ifc.dt.module.json",
+                "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.cppm.ifc.dt.d.json",
+                "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "glm",
+                    "source-path": "c:\\dev\\opengl_renderer\\opengl_renderer\\src\\vendor\\glm\\glm.cppm",
+                    "is-interface": true
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

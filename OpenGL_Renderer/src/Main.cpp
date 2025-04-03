@@ -13,6 +13,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -73,11 +76,14 @@ int main(void)
 	
 	IndexBuffer ib(indices, 6);
 	
+	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
 	Shader shader("src/Shaders/Basic.shader");
 	shader.Bind();
 	shader.SetUniform4f("uColor", 0.8f, 0.3f, 0.8f, 1.0f);
+	shader.SetUniformMat4f("mvp", proj);
 
-	Texture texture("src/Textures/avengers logo.jpg");
+	Texture texture("src/Textures/cherno logo.png");
 	texture.Bind();
 	shader.SetUniform1i("uTexture", 0);
 
