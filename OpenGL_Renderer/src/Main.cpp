@@ -28,6 +28,9 @@ int main(void)
 	GLFWwindow* window;
 	const char* glsl_version = "#version 300 es";
 
+	glm::vec3 positionA(0.75f, 0.75f, 0.0f);
+	glm::vec3 positionB(-0.75f, -0.75f, 0.0f);
+
 	/* Initialize the library */
 	if (!glfwInit())
 		return -1;
@@ -84,6 +87,8 @@ int main(void)
 	
 	IndexBuffer ib(indices, 6);
 	
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), positionA);
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
 
 	Shader shader("src/Shaders/Basic.shader");
@@ -91,7 +96,7 @@ int main(void)
 	shader.SetUniform4f("uColor", 0.8f, 0.3f, 0.8f, 1.0f);
 	shader.SetUniformMat4f("mvp", proj);
 
-	Texture texture("src/Textures/cherno logo.png");
+	Texture texture("src/Textures/player.png");
 	texture.Bind();
 	shader.SetUniform1i("uTexture", 0);
 
@@ -126,9 +131,18 @@ int main(void)
 		
 
 		shader.Bind();
-		shader.SetUniform4f("uColor", r, 0.3f, 0.8f, 1.0f);
-
-		renderer.Draw(va, ib, shader);
+		{
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), positionA);
+			glm::mat4 mvp = proj * view * model;
+			shader.SetUniformMat4f("mvp", mvp);
+			renderer.Draw(va, ib, shader);
+		}
+		{
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), positionB);
+			glm::mat4 mvp = proj * view * model;
+			shader.SetUniformMat4f("mvp", mvp);
+			renderer.Draw(va, ib, shader);
+		}
 
 		if (r > 1.0f)
 			increment = -0.05f;
@@ -141,6 +155,7 @@ int main(void)
 		static float f = 0.0f;
 		static int counter = 0;
 
+		// creating a window in ImGui
 		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
 		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
