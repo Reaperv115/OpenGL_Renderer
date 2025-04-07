@@ -28,7 +28,7 @@ int main(void)
 	GLFWwindow* window;
 	const char* glsl_version = "#version 300 es";
 
-	glm::vec3 positionA(0.75f, 0.75f, 0.0f);
+	glm::vec3 positionA(0.0f, -1.0f, 0.0f);
 	glm::vec3 positionB(-0.75f, -0.75f, 0.0f);
 
 	/* Initialize the library */
@@ -42,7 +42,7 @@ int main(void)
 	
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "2D Engine", NULL, NULL);
+	window = glfwCreateWindow(1440, 1080, "2D Engine", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -61,16 +61,14 @@ int main(void)
 
 	float triangle[] =
 	{
-	   -0.5f, -0.5f, 0.0f, 0.0f, // 0
-		0.5f, -0.5f, 1.0f, 0.0f, // 1
-		0.5f,  0.5f, 1.0f, 1.0f, // 2
-	   -0.5f,  0.5f, 0.0f, 1.0f  // 3
+	   -0.25f, -0.25f, 0.0f, 0.0f, // 0
+		0.25f, -0.25f, 1.0f, 0.0f, // 1
+		0.0f,  0.25f, 0.5f, 1.0f, // 2
 	};
 
 	unsigned int indices[] =
 	{
-		0, 1, 2,
-		2, 3, 0
+		0, 1, 2
 	};
 
 	Call(glEnable(GL_BLEND));
@@ -78,25 +76,23 @@ int main(void)
 
 
 	VertexArray va;
-	VertexBuffer vb(triangle, 4 * 4 * sizeof(float));
+	VertexBuffer vb(triangle, 3 * 4 * sizeof(float));
 
 	VertexBufferLayout layout;
 	layout.Push<float>(2);
 	layout.Push<float>(2);
 	va.AddBuffer(vb, layout);
 	
-	IndexBuffer ib(indices, 6);
+	IndexBuffer ib(indices, 3);
 	
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), positionA);
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, -0.3f, 0));
+	glm::mat4 proj = glm::ortho(-3.0f, 3.0f, -2.5f, 2.5f, -1.0f, 1.0f);
 
 	Shader shader("src/Shaders/Basic.shader");
 	shader.Bind();
-	shader.SetUniform4f("uColor", 0.8f, 0.3f, 0.8f, 1.0f);
-	shader.SetUniformMat4f("mvp", proj);
 
-	Texture texture("src/Textures/player.png");
+	Texture texture("src/Textures/other player.png");
 	texture.Bind();
 	shader.SetUniform1i("uTexture", 0);
 
@@ -137,12 +133,12 @@ int main(void)
 			shader.SetUniformMat4f("mvp", mvp);
 			renderer.Draw(va, ib, shader);
 		}
-		{
+		/*{
 			glm::mat4 model = glm::translate(glm::mat4(1.0f), positionB);
 			glm::mat4 mvp = proj * view * model;
 			shader.SetUniformMat4f("mvp", mvp);
 			renderer.Draw(va, ib, shader);
-		}
+		}*/
 
 		if (r > 1.0f)
 			increment = -0.05f;
@@ -150,7 +146,6 @@ int main(void)
 			increment = 0.05f;
 
 		r += increment;
-		std::cout << r << std::endl;
 
 		static float f = 0.0f;
 		static int counter = 0;
@@ -187,8 +182,6 @@ int main(void)
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-
-	//glfwDestroyWindow(window);
 
 	glfwTerminate();
 	return 0;

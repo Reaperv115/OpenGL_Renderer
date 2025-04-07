@@ -30,7 +30,7 @@ Texture::~Texture()
 
 void Texture::Bind(unsigned int slot /*= 0*/) const
 {
-	Call(glActiveTexture(GL_TEXTURE0));
+	Call(glActiveTexture(GL_TEXTURE0 + slot));
 	Call(glBindTexture(GL_TEXTURE_2D, _id));
 }
 
