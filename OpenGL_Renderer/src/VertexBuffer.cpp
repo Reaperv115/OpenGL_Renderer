@@ -1,3 +1,4 @@
+#include "oglrpch.h"
 #include "VertexBuffer.h"
 #include "Renderer.h"
 

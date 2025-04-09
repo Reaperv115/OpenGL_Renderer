@@ -1,6 +1,5 @@
+#include "oglrpch.h"
 #include "Renderer.h"
-
-#include <iostream>
 #include "Shader.h"
 
 void GetErrors()

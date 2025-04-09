@@ -1,6 +1,5 @@
+#include "oglrpch.h"
 #include "Texture.h"
-
-#include "stb_image/stb_image.h"
 
 Texture::Texture(const std::string& filepath)
 	: _id(0), filePath(filepath), localBuffer(nullptr), width(0), height(0), bpP(0)

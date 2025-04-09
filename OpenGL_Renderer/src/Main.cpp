@@ -1,13 +1,4 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_impl_glfw.h"
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-
+#include "oglrpch.h"
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
@@ -15,21 +6,20 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "Texture.h"
-
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "Camera.h"
 
 bool show_demo_window = true;
 bool show_another_window = false;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
 
 int main(void)
 {
 	GLFWwindow* window;
 	const char* glsl_version = "#version 300 es";
 
-	glm::vec3 positionA(0.0f, -1.0f, 0.0f);
-	glm::vec3 positionB(-0.75f, -0.75f, 0.0f);
+	glm::vec3 positionA(0.0f, -2.2f, 0.0f);
 
 	/* Initialize the library */
 	if (!glfwInit())
@@ -42,7 +32,7 @@ int main(void)
 	
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(1440, 1080, "2D Engine", NULL, NULL);
+	window = glfwCreateWindow(screen_width, screen_height, "2D Engine", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -85,9 +75,7 @@ int main(void)
 	
 	IndexBuffer ib(indices, 3);
 	
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), positionA);
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, -0.3f, 0));
-	glm::mat4 proj = glm::ortho(-3.0f, 3.0f, -2.5f, 2.5f, -1.0f, 1.0f);
+	Camera camera(-2.5f, 2.5f, -2.5f, 2.5f, -1.0f, 1.0f);
 
 	Shader shader("src/Shaders/Basic.shader");
 	shader.Bind();
@@ -127,18 +115,13 @@ int main(void)
 		
 
 		shader.Bind();
+
 		{
 			glm::mat4 model = glm::translate(glm::mat4(1.0f), positionA);
-			glm::mat4 mvp = proj * view * model;
+			glm::mat4 mvp = camera.GetMVPMatrix(model);
 			shader.SetUniformMat4f("mvp", mvp);
 			renderer.Draw(va, ib, shader);
 		}
-		/*{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), positionB);
-			glm::mat4 mvp = proj * view * model;
-			shader.SetUniformMat4f("mvp", mvp);
-			renderer.Draw(va, ib, shader);
-		}*/
 
 		if (r > 1.0f)
 			increment = -0.05f;

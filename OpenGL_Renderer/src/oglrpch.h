@@ -1,0 +1,16 @@
+#pragma once
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_glfw.h"
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include "stb_image/stb_image.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include <unordered_map>
+
+#define GLM_ENABLE_EXPERIMENTAL

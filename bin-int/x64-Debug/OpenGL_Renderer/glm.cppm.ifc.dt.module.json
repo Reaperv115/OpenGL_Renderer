@@ -7,7 +7,8 @@
             "outputs": [
                 "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.cppm.ifc.dt.module.json",
                 "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.cppm.ifc.dt.d.json",
-                "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.ifc"
+                "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\glm.ifc",
+                "C:\\Dev\\OpenGL_Renderer\\bin-int\\x64-Debug\\OpenGL_Renderer\\OpenGL_Renderer.pch"
             ],
             "provides": [
                 {

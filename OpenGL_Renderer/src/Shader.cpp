@@ -1,8 +1,6 @@
+#include "oglrpch.h"
 #include "Shader.h"
 #include "Renderer.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
 Shader::Shader(const std::string& filepath)
 	: filePath(filepath), _id(0)

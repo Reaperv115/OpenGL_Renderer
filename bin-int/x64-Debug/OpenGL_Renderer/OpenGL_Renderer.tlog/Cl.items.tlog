@@ -1,3 +1,6 @@
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\oglrpch.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\oglrpch.obj
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Player.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Player.obj
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Camera.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Camera.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Shader.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Shader.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\IndexBuffer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\IndexBuffer.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Renderer.obj
