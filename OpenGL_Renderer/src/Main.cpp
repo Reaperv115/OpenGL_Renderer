@@ -7,6 +7,8 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "Player.h"
+
 
 bool show_demo_window = true;
 bool show_another_window = false;
@@ -20,6 +22,7 @@ int main(void)
 	const char* glsl_version = "#version 300 es";
 
 	glm::vec3 positionA(0.0f, -2.2f, 0.0f);
+	Player player(5.0f, positionA);
 
 	/* Initialize the library */
 	if (!glfwInit())
@@ -91,6 +94,8 @@ int main(void)
 
 	Renderer renderer;
 
+	
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -100,11 +105,20 @@ int main(void)
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-	float r = 0.0f;
-	float increment = 0.5f;
+	// TODO: create deltatime for player movement
+
+	std::chrono::steady_clock::time_point lastUpdate, currentUpdate;
+	float deltaTime;
+	lastUpdate = std::chrono::steady_clock::now();
+	
+	
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
+		currentUpdate = std::chrono::steady_clock::now();
+		deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(currentUpdate - lastUpdate).count() / 1000000.0f;
+		lastUpdate = currentUpdate;
 		/* Render here */
 		renderer.Clear();
 
@@ -112,23 +126,26 @@ int main(void)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		
+		if (GetAsyncKeyState('A') & 0x8000)
+		{
+			std::cout << deltaTime << std::endl;
+			player.MovePlayer(-deltaTime);
+			// Do stuff
+		}
+		if (GetAsyncKeyState('D') & 0x8000)
+		{
+			std::cout << deltaTime << std::endl;
+			player.MovePlayer(deltaTime);
+		}
 
 		shader.Bind();
 
 		{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), positionA);
+			glm::mat4 model = glm::translate(glm::mat4(1.0f), player.GetPosition());
 			glm::mat4 mvp = camera.GetMVPMatrix(model);
 			shader.SetUniformMat4f("mvp", mvp);
 			renderer.Draw(va, ib, shader);
 		}
-
-		if (r > 1.0f)
-			increment = -0.05f;
-		else if (r < 0.05f)
-			increment = 0.05f;
-
-		r += increment;
 
 		static float f = 0.0f;
 		static int counter = 0;
