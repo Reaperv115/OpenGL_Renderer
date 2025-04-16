@@ -30,3 +30,12 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 	va.Bind();
 	Call(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 }
+
+void Renderer::Draw(const VertexArray& va, const VertexBuffer& vb, const Shader& shader) const
+{
+	shader.Bind();
+	vb.Bind();
+	va.Bind();
+	Call(glDrawArrays(GL_TRIANGLES, 0, 36));
+	Call(glDepthMask(GL_TRUE));
+}

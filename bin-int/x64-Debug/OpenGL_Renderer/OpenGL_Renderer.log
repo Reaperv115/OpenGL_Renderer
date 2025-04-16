@@ -1,3 +1,10 @@
 ﻿  Scanning sources for module dependencies...
+  Enemy.cpp
   Main.cpp
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Player.h(21,9): warning C4200: nonstandard extension used: zero-sized array in struct/union
+  (compiling source file '/src/Main.cpp')
+      C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Player.h(21,9):
+      This member will be ignored by a defaulted constructor or copy/move assignment operator
+  
+  Generating Code...
   OpenGL_Renderer.vcxproj -> C:\Dev\OpenGL_Renderer\bin\x64-Debug\OpenGL_Renderer\OpenGL_Renderer.exe

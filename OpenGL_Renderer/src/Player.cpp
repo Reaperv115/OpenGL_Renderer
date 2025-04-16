@@ -4,7 +4,7 @@
 Player::Player(float speed, glm::vec3 position)
 	: _speed(speed), _position(position)
 {
-	
+	transform.position = _position;
 }
 Player::Player()
 {
@@ -19,13 +19,14 @@ Player::~Player()
 
 glm::vec3 Player::GetPosition() const
 {
-	return _position;
+	return transform.position;
 }
 
 float Player::GetSpeed() const
 {
 	return _speed;
 }
+
 
 void Player::SetSpeed(float speed)
 {
@@ -34,6 +35,5 @@ void Player::SetSpeed(float speed)
 
 void Player::MovePlayer(float dt)
 {
-	_position.x += _speed * dt;
-	//_position.y += _speed * dt;
+	transform.position.x += _speed * dt;
 }

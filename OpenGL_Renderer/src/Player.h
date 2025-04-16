@@ -1,20 +1,24 @@
 #pragma once
+#include "Transform.h"
 
+	class Player
+	{
+	public:
+		Player();
+		Player(float speed, glm::vec3 position);
+		~Player();
 
-class Player
-{
-public:
-	Player();
-	Player(float speed, glm::vec3);
-	~Player();
+		glm::vec3 GetPosition() const;
+		float GetSpeed() const;
 
-	glm::vec3 GetPosition() const;
-	float GetSpeed() const;
+		void SetSpeed(float speed);
+		void MovePlayer(float dt);
 
-	void SetSpeed(float speed);
-	void MovePlayer(float dt);
-private:
-	float _speed;
-	glm::vec3 _position;
-};
+	private:
+		Transform transform;
+		glm::vec3 _position;
+		float _speed;
+		float playerVertices[];
+	};
+
 

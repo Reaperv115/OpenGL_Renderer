@@ -8,6 +8,8 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Graphics/Graphics.h"
+#include "Enemy.h"
 
 
 bool show_demo_window = true;
@@ -18,68 +20,66 @@ ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 int main(void)
 {
-	GLFWwindow* window;
-	const char* glsl_version = "#version 300 es";
+	
 
 	glm::vec3 positionA(0.0f, -2.2f, 0.0f);
 	Player player(5.0f, positionA);
 
-	/* Initialize the library */
-	if (!glfwInit())
-		return -1;
-	else
-		std::cout << "GLFW Version: " << glfwGetVersionString() << std::endl;
+	glm::vec3 enemyPosition(-2.0f, 1.5f, 0.0f);
+	Enemy enemy(enemyPosition, 5.0f);
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	
 	
 
-	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(screen_width, screen_height, "2D Engine", NULL, NULL);
-	if (!window)
-	{
-		glfwTerminate();
-		return -1;
-	}
+	Graphics gfx;
+	gfx.InitializeOpenGL(screen_width, screen_height, "2D Engine");
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
-
-	glfwSwapInterval(1);
-
-	if (glewInit() != GLEW_OK)
-		return -1;
-	else
-		std::cout << "GLEW Version: " <<  glewGetString(GLEW_VERSION) << std::endl;
-
-	float triangle[] =
+	float Player[] =
 	{
 	   -0.25f, -0.25f, 0.0f, 0.0f, // 0
 		0.25f, -0.25f, 1.0f, 0.0f, // 1
 		0.0f,  0.25f, 0.5f, 1.0f, // 2
 	};
 
-	unsigned int indices[] =
+	unsigned int playerIndices[] =
 	{
 		0, 1, 2
 	};
 
-	Call(glEnable(GL_BLEND));
-	Call(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+	float enemyVertices[] =
+	{
+		-0.25f, -0.25f, 0.0f, 0.0f, // 0
+		0.25f, -0.25f, 1.0f, 0.0f, // 1
+		0.0f,  0.25f, 0.5f, 1.0f, // 2	
+	};
 
+	unsigned int enemyIndices[] =
+	{
+		0, 1, 2
+	};
+	
+
+	
 
 	VertexArray va;
-	VertexBuffer vb(triangle, 3 * 4 * sizeof(float));
+	Camera camera;
+
+	
+
+
+	// player
+	VertexBuffer vb(Player, 3 * 4 * sizeof(float));
 
 	VertexBufferLayout layout;
 	layout.Push<float>(2);
 	layout.Push<float>(2);
 	va.AddBuffer(vb, layout);
 	
-	IndexBuffer ib(indices, 3);
-	
-	Camera camera(-2.5f, 2.5f, -2.5f, 2.5f, -1.0f, 1.0f);
-
+	IndexBuffer ib(playerIndices, 3);
 	Shader shader("src/Shaders/Basic.shader");
 	shader.Bind();
 
@@ -87,25 +87,22 @@ int main(void)
 	texture.Bind();
 	shader.SetUniform1i("uTexture", 0);
 
-	va.Unbind();
-	vb.Unbind();
-	ib.Unbind();
-	shader.Unbind();
+	VertexBuffer enemyBuffer(enemyVertices, 3 * 4 * sizeof(float));
+
+	VertexBufferLayout enemyLayout;
+	enemyLayout.Push<float>(2);
+	enemyLayout.Push<float>(2);
+	va.AddBuffer(enemyBuffer, enemyLayout);
+
+	IndexBuffer enemyIB(enemyIndices, 3);
+	shader.Bind();
+	shader.SetUniform1i("uTexture", 0);
+
 
 	Renderer renderer;
 
 	
-
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init();
-	ImGui::StyleColorsDark();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	// TODO: create deltatime for player movement
+	
 
 	std::chrono::steady_clock::time_point lastUpdate, currentUpdate;
 	float deltaTime;
@@ -114,7 +111,7 @@ int main(void)
 	
 
 	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(gfx.GetWindow()))
 	{
 		currentUpdate = std::chrono::steady_clock::now();
 		deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(currentUpdate - lastUpdate).count() / 1000000.0f;
@@ -137,15 +134,26 @@ int main(void)
 			std::cout << deltaTime << std::endl;
 			player.MovePlayer(deltaTime);
 		}
-
 		shader.Bind();
+		shader.SetUniform1i("uTexture", 0);
 
-		{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), player.GetPosition());
-			glm::mat4 mvp = camera.GetMVPMatrix(model);
-			shader.SetUniformMat4f("mvp", mvp);
-			renderer.Draw(va, ib, shader);
-		}
+
+
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), player.GetPosition());
+		camera.SetViewMatrix(glm::mat4(1.0f));
+		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f, -1.0f, 1.0f));
+		glm::mat4 mvp = camera.GetMVPMatrix(model);
+		shader.SetUniformMat4f("mvp", mvp);
+		renderer.Draw(va, ib, shader);
+
+
+		glm::mat4 modelMat = glm::translate(glm::mat4(1.0f), enemy.GetPosition());
+		camera.SetViewMatrix(glm::mat4(1.0f));
+		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
+		mvp = camera.GetMVPMatrix(modelMat);
+		shader.SetUniformMat4f("mvp", mvp);
+		renderer.Draw(va, enemyIB, shader);
+		
 
 		static float f = 0.0f;
 		static int counter = 0;
@@ -173,7 +181,7 @@ int main(void)
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		/* Swap front and back buffers */
-		Call(glfwSwapBuffers(window));
+		Call(glfwSwapBuffers(gfx.GetWindow()));
 
 		/* Poll for and process events */
 		Call(glfwPollEvents());
