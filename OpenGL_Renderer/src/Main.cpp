@@ -25,8 +25,8 @@ int main(void)
 	glm::vec3 positionA(0.0f, -2.2f, 0.0f);
 	Player player(5.0f, positionA);
 
-	glm::vec3 enemyPosition(-2.0f, 1.5f, 0.0f);
-	Enemy enemy(enemyPosition, 5.0f);
+	
+
 
 	
 	
@@ -54,12 +54,12 @@ int main(void)
 	{
 		-0.25f, -0.25f, 0.0f, 0.0f, // 0
 		0.25f, -0.25f, 1.0f, 0.0f, // 1
-		0.0f,  0.25f, 0.5f, 1.0f, // 2	
+		0.0f,  0.25f, 0.5f, 1.0f, // 2
 	};
 
 	unsigned int enemyIndices[] =
 	{
-		0, 1, 2
+		0, 2, 1
 	};
 	
 
@@ -87,6 +87,7 @@ int main(void)
 	texture.Bind();
 	shader.SetUniform1i("uTexture", 0);
 
+	// Enemy*
 	VertexBuffer enemyBuffer(enemyVertices, 3 * 4 * sizeof(float));
 
 	VertexBufferLayout enemyLayout;
@@ -94,9 +95,18 @@ int main(void)
 	enemyLayout.Push<float>(2);
 	va.AddBuffer(enemyBuffer, enemyLayout);
 
+	glm::vec3 enemyPosition(-2.2f, 2.1f, 0.0f);
+
 	IndexBuffer enemyIB(enemyIndices, 3);
-	shader.Bind();
-	shader.SetUniform1i("uTexture", 0);
+	Shader enemyShader("src/Shaders/Enemy.shader");
+	enemyShader.Bind();
+	
+	Enemy enemy(enemyPosition, 5.0f);
+	enemy.GetModelMatrix() = glm::translate(glm::mat4(1.0f), enemyPosition);
+	enemy.GetModelMatrix() = glm::rotate(enemy.GetModelMatrix(), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	enemy.GetModelMatrix() = glm::scale(enemy.GetModelMatrix(), glm::vec3(0.25f, 0.25f, 0.0f)); 
+	shader.SetUniformMat4f("mvp", enemy.GetModelMatrix());
+	enemyShader.SetUniform4f("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
 
 
 	Renderer renderer;
@@ -123,36 +133,42 @@ int main(void)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		if (GetAsyncKeyState('A') & 0x8000)
+		if (GetAsyncKeyState('A'))
 		{
 			std::cout << deltaTime << std::endl;
 			player.MovePlayer(-deltaTime);
 			// Do stuff
 		}
-		if (GetAsyncKeyState('D') & 0x8000)
+		if (GetAsyncKeyState('D'))
 		{
 			std::cout << deltaTime << std::endl;
 			player.MovePlayer(deltaTime);
 		}
+		
+
+		enemy.MoveEnemy(deltaTime);
+		
+
+
 		shader.Bind();
-		shader.SetUniform1i("uTexture", 0);
-
-
-
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), player.GetPosition());
 		camera.SetViewMatrix(glm::mat4(1.0f));
 		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f, -1.0f, 1.0f));
 		glm::mat4 mvp = camera.GetMVPMatrix(model);
 		shader.SetUniformMat4f("mvp", mvp);
+		shader.SetUniform1i("uTexture", 0);
 		renderer.Draw(va, ib, shader);
 
-
-		glm::mat4 modelMat = glm::translate(glm::mat4(1.0f), enemy.GetPosition());
+		enemyShader.Bind();
+		enemy.GetModelMatrix() = glm::translate(glm::mat4(1.0f), enemy.GetPosition());
+		enemy.GetModelMatrix() = glm::rotate(enemy.GetModelMatrix(), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		enemy.GetModelMatrix() = glm::scale(enemy.GetModelMatrix(), glm::vec3(0.25f, 0.25f, 0.0f));
 		camera.SetViewMatrix(glm::mat4(1.0f));
 		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
-		mvp = camera.GetMVPMatrix(modelMat);
-		shader.SetUniformMat4f("mvp", mvp);
-		renderer.Draw(va, enemyIB, shader);
+		mvp = camera.GetMVPMatrix(enemy.GetModelMatrix());
+		enemyShader.SetUniformMat4f("mvp", mvp);
+		enemyShader.SetUniform4f("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
+		renderer.Draw(va, enemyIB, enemyShader);
 		
 
 		static float f = 0.0f;
