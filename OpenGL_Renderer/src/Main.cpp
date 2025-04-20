@@ -7,9 +7,9 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
-#include "Player.h"
+#include "GamePlay/Player.h"
 #include "Graphics/Graphics.h"
-#include "Enemy.h"
+#include "GamePlay/Enemy.h"
 
 
 bool show_demo_window = true;
@@ -20,16 +20,9 @@ ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 int main(void)
 {
-	
+	std::chrono::steady_clock::time_point lastUpdate, currentUpdate;
+	float deltaTime;
 
-	glm::vec3 positionA(0.0f, -2.2f, 0.0f);
-	Player player(5.0f, positionA);
-
-	
-
-
-	
-	
 
 	Graphics gfx;
 	gfx.InitializeOpenGL(screen_width, screen_height, "2D Engine");
@@ -38,7 +31,7 @@ int main(void)
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	
 
-	float Player[] =
+	float playerVertices[] =
 	{
 	   -0.25f, -0.25f, 0.0f, 0.0f, // 0
 		0.25f, -0.25f, 1.0f, 0.0f, // 1
@@ -62,64 +55,79 @@ int main(void)
 		0, 2, 1
 	};
 	
+	float missileVertices[] =
+	{
+		-0.25f, -0.25f, 0.0f, 0.0f, // 0
+		0.25f, -0.25f, 1.0f, 0.0f, // 1
+		0.0f,  0.25f, 0.5f, 1.0f, // 2
+	};
 
-	
+	unsigned int missileIndices[] =
+	{
+		0, 1, 2,
+	};
 
-	VertexArray va;
+	glm::mat4 mvp;
+
 	Camera camera;
+	Renderer renderer;
 
 	
 
 
-	// player
-	VertexBuffer vb(Player, 3 * 4 * sizeof(float));
+	// Player
+	VertexArray playerVA;
+	VertexBuffer playervertexBuffer(playerVertices, 3 * 4 * sizeof(float));
 
 	VertexBufferLayout layout;
 	layout.Push<float>(2);
 	layout.Push<float>(2);
-	va.AddBuffer(vb, layout);
+	playerVA.AddBuffer(playervertexBuffer, layout);
+
+	Texture playerTexture("src/Textures/other player.png");
+	playerTexture.Bind();
 	
 	IndexBuffer ib(playerIndices, 3);
-	Shader shader("src/Shaders/Basic.shader");
-	shader.Bind();
+	Shader playerShader("src/Shaders/Player.shader");
+	playerShader.Bind();
 
-	Texture texture("src/Textures/other player.png");
-	texture.Bind();
-	shader.SetUniform1i("uTexture", 0);
+	
+	
+
+	glm::vec3 playerPosition(0.0f, -2.2f, 0.0f);
+	Player player(5.0f, playerPosition);
+	playerVA.Unbind();
+
 
 	// Enemy*
+	VertexArray enemyVA;
 	VertexBuffer enemyBuffer(enemyVertices, 3 * 4 * sizeof(float));
 
 	VertexBufferLayout enemyLayout;
 	enemyLayout.Push<float>(2);
 	enemyLayout.Push<float>(2);
-	va.AddBuffer(enemyBuffer, enemyLayout);
+	enemyVA.AddBuffer(enemyBuffer, enemyLayout);
 
-	glm::vec3 enemyPosition(-2.2f, 2.1f, 0.0f);
+	Texture enemyTexture("src/Textures/player.png");
+	enemyTexture.Bind();
+
+	glm::vec3 enemyPosition(0.5f, 0.5f, 0.0f);
 
 	IndexBuffer enemyIB(enemyIndices, 3);
 	Shader enemyShader("src/Shaders/Enemy.shader");
 	enemyShader.Bind();
-	
+
 	Enemy enemy(enemyPosition, 5.0f);
-	enemy.GetModelMatrix() = glm::translate(glm::mat4(1.0f), enemyPosition);
-	enemy.GetModelMatrix() = glm::rotate(enemy.GetModelMatrix(), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	enemy.GetModelMatrix() = glm::scale(enemy.GetModelMatrix(), glm::vec3(0.25f, 0.25f, 0.0f)); 
-	shader.SetUniformMat4f("mvp", enemy.GetModelMatrix());
-	enemyShader.SetUniform4f("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
-
-
-	Renderer renderer;
+	enemyShader.SetUniformMat4f("mvp", enemy.GetRotation());
+	enemyShader.SetUniform1i("texturesample", 0);
+	enemyVA.Unbind();
 
 	
 	
 
-	std::chrono::steady_clock::time_point lastUpdate, currentUpdate;
-	float deltaTime;
+
+
 	lastUpdate = std::chrono::steady_clock::now();
-	
-	
-
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(gfx.GetWindow()))
 	{
@@ -149,30 +157,43 @@ int main(void)
 		enemy.MoveEnemy(deltaTime);
 		
 
-
-		shader.Bind();
-		glm::mat4 model = glm::translate(glm::mat4(1.0f), player.GetPosition());
-		camera.SetViewMatrix(glm::mat4(1.0f));
-		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f, -1.0f, 1.0f));
-		glm::mat4 mvp = camera.GetMVPMatrix(model);
-		shader.SetUniformMat4f("mvp", mvp);
-		shader.SetUniform1i("uTexture", 0);
-		renderer.Draw(va, ib, shader);
-
-		enemyShader.Bind();
-		enemy.GetModelMatrix() = glm::translate(glm::mat4(1.0f), enemy.GetPosition());
-		enemy.GetModelMatrix() = glm::rotate(enemy.GetModelMatrix(), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		enemy.GetModelMatrix() = glm::scale(enemy.GetModelMatrix(), glm::vec3(0.25f, 0.25f, 0.0f));
+		
+		player.GetworldMatrix() = glm::translate(glm::mat4(1.0f), player.GetPosition());
 		camera.SetViewMatrix(glm::mat4(1.0f));
 		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
-		mvp = camera.GetMVPMatrix(enemy.GetModelMatrix());
+		mvp = camera.GetMVPMatrix(player.GetworldMatrix());
+		playerShader.Bind();
+		playerTexture.Bind();
+		playerShader.SetUniformMat4f("mvp", mvp);
+		playerShader.SetUniform1i("uTexture", 0);
+		renderer.Draw(playerVA, ib, playerShader);
+
+
+		enemy.GetRotation() = glm::translate(glm::mat4(1.0f), enemy.GetPosition());
+		enemy.GetRotation() = glm::rotate(enemy.GetRotation(), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		enemy.GetRotation() = glm::scale(enemy.GetRotation(), glm::vec3(0.25f, 0.25f, 0.0f));
+		camera.SetViewMatrix(glm::mat4(1.0f));
+		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
+		mvp = camera.GetMVPMatrix(enemy.GetRotation());
+		enemyShader.Bind();
+		enemyTexture.Bind();
 		enemyShader.SetUniformMat4f("mvp", mvp);
-		enemyShader.SetUniform4f("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
-		renderer.Draw(va, enemyIB, enemyShader);
+		enemyShader.SetUniform1i("texturesample", 0);
+		renderer.Draw(enemyVA, enemyIB, enemyShader);
+
+
+		
+		
+
 		
 
 		static float f = 0.0f;
 		static int counter = 0;
+
+		ImGui::Begin("stop triangle");
+		if (ImGui::Button("STOP"))
+			enemy.StopTriangle(!enemy.IsStopped());
+		ImGui::End();
 
 		// creating a window in ImGui
 		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
