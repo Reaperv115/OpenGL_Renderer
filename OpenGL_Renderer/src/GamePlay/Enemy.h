@@ -14,10 +14,14 @@ public:
 	bool IsStopped();
 	glm::vec3 GetPosition() const;
 	glm::mat4& GetRotation();
+	float* GetVertices();
+	unsigned int* GetIndices();
 private:
 	Transform transform;
 	glm::vec3 _position;
 	float _speed;
 	bool isStopped;
+	float Vertices[12];
+	unsigned int Indices[3];
 };
 

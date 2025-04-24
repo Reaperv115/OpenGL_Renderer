@@ -15,6 +15,15 @@
 bool show_demo_window = true;
 bool show_another_window = false;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+bool fireMissile = false;
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+		fireMissile = true;
+
+	std::cout << "mouse button pressed" << std::endl;
+}
 
 
 
@@ -31,42 +40,6 @@ int main(void)
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	
 
-	float playerVertices[] =
-	{
-	   -0.25f, -0.25f, 0.0f, 0.0f, // 0
-		0.25f, -0.25f, 1.0f, 0.0f, // 1
-		0.0f,  0.25f, 0.5f, 1.0f, // 2
-	};
-
-	unsigned int playerIndices[] =
-	{
-		0, 1, 2
-	};
-
-	float enemyVertices[] =
-	{
-		-0.25f, -0.25f, 0.0f, 0.0f, // 0
-		0.25f, -0.25f, 1.0f, 0.0f, // 1
-		0.0f,  0.25f, 0.5f, 1.0f, // 2
-	};
-
-	unsigned int enemyIndices[] =
-	{
-		0, 2, 1
-	};
-	
-	float missileVertices[] =
-	{
-		-0.25f, -0.25f, 0.0f, 0.0f, // 0
-		0.25f, -0.25f, 1.0f, 0.0f, // 1
-		0.0f,  0.25f, 0.5f, 1.0f, // 2
-	};
-
-	unsigned int missileIndices[] =
-	{
-		0, 1, 2,
-	};
-
 	glm::mat4 mvp;
 
 	Camera camera;
@@ -76,8 +49,11 @@ int main(void)
 
 
 	// Player
+	glm::vec3 playerPosition(0.0f, -2.2f, 0.0f);
+	Player player(5.0f, playerPosition);
+
 	VertexArray playerVA;
-	VertexBuffer playervertexBuffer(playerVertices, 3 * 4 * sizeof(float));
+	VertexBuffer playervertexBuffer(player.GetPlayerVertices(), 3 * 4 * sizeof(float));
 
 	VertexBufferLayout layout;
 	layout.Push<float>(2);
@@ -87,44 +63,63 @@ int main(void)
 	Texture playerTexture("src/Textures/other player.png");
 	playerTexture.Bind();
 	
-	IndexBuffer ib(playerIndices, 3);
+	IndexBuffer ib(player.GetPlayerIndices(), 3);
 	Shader playerShader("src/Shaders/Player.shader");
 	playerShader.Bind();
 
 	
 	
 
-	glm::vec3 playerPosition(0.0f, -2.2f, 0.0f);
-	Player player(5.0f, playerPosition);
-	playerVA.Unbind();
+	
 
 
 	// Enemy*
+	glm::vec3 enemyPosition(0.5f, 0.5f, 0.0f);
+	Enemy enemy(enemyPosition, 5.0f);
+
 	VertexArray enemyVA;
-	VertexBuffer enemyBuffer(enemyVertices, 3 * 4 * sizeof(float));
+	VertexBuffer enemyBuffer(enemy.GetVertices(), 3 * 4 * sizeof(float));
 
 	VertexBufferLayout enemyLayout;
 	enemyLayout.Push<float>(2);
 	enemyLayout.Push<float>(2);
 	enemyVA.AddBuffer(enemyBuffer, enemyLayout);
 
+	IndexBuffer enemyIB(enemy.GetIndices(), 3);
+
 	Texture enemyTexture("src/Textures/player.png");
 	enemyTexture.Bind();
 
-	glm::vec3 enemyPosition(0.5f, 0.5f, 0.0f);
-
-	IndexBuffer enemyIB(enemyIndices, 3);
 	Shader enemyShader("src/Shaders/Enemy.shader");
 	enemyShader.Bind();
 
-	Enemy enemy(enemyPosition, 5.0f);
-	enemyShader.SetUniformMat4f("mvp", enemy.GetRotation());
-	enemyShader.SetUniform1i("texturesample", 0);
+	
+
+	// Missile
+	glm::vec3 missilePos(0.5f, -2.1f, 0.0f);
+	Missile missile(5.0f, missilePos);
+
+	VertexArray missileVA;
+	VertexBuffer missileVB(missile.GetVertices(), 3 * 4 * sizeof(float));
+	VertexBufferLayout missilebufferlayOut;
+	missilebufferlayOut.Push<float>(2);
+	missilebufferlayOut.Push<float>(2);
+	missileVA.AddBuffer(missileVB, missilebufferlayOut);
+
+	IndexBuffer missileIB(missile.GetIndices(), 3);
+
+	Texture missileTexture("src/Textures/missile.png");
+	missileTexture.Bind();
+
+	Shader missileShader("src/Shaders/Missile.shader");
+	missileShader.Bind();
+
+	
+
+	
+	playerVA.Unbind();
 	enemyVA.Unbind();
-
-	
-	
-
+	missileVA.Unbind();
 
 
 	lastUpdate = std::chrono::steady_clock::now();
@@ -152,37 +147,57 @@ int main(void)
 			std::cout << deltaTime << std::endl;
 			player.MovePlayer(deltaTime);
 		}
+		glfwSetMouseButtonCallback(gfx.GetWindow(), mouse_button_callback);
 		
 
 		enemy.MoveEnemy(deltaTime);
 		
 
-		
+		//PLAYER
+		playerVA.Bind();
 		player.GetworldMatrix() = glm::translate(glm::mat4(1.0f), player.GetPosition());
+
 		camera.SetViewMatrix(glm::mat4(1.0f));
 		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
 		mvp = camera.GetMVPMatrix(player.GetworldMatrix());
+
 		playerShader.Bind();
 		playerTexture.Bind();
 		playerShader.SetUniformMat4f("mvp", mvp);
 		playerShader.SetUniform1i("uTexture", 0);
 		renderer.Draw(playerVA, ib, playerShader);
 
-
+		// ENEMY*
+		enemyVA.Bind();
 		enemy.GetRotation() = glm::translate(glm::mat4(1.0f), enemy.GetPosition());
 		enemy.GetRotation() = glm::rotate(enemy.GetRotation(), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		enemy.GetRotation() = glm::scale(enemy.GetRotation(), glm::vec3(0.25f, 0.25f, 0.0f));
+		enemy.GetRotation() = glm::scale(enemy.GetRotation(), glm::vec3(0.5f, 0.5f, 0.0f));
+
 		camera.SetViewMatrix(glm::mat4(1.0f));
 		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
 		mvp = camera.GetMVPMatrix(enemy.GetRotation());
+
 		enemyShader.Bind();
 		enemyTexture.Bind();
 		enemyShader.SetUniformMat4f("mvp", mvp);
 		enemyShader.SetUniform1i("texturesample", 0);
 		renderer.Draw(enemyVA, enemyIB, enemyShader);
 
+		// MISSILE
+		missileVA.Bind();
+		missile.GetWorldMatrix() = glm::translate(glm::mat4(1.0f), missilePos);
+		missile.GetWorldMatrix() = glm::scale(missile.GetWorldMatrix(), glm::vec3(0.25f, 0.25f, 0.0f));
 
-		
+		camera.SetViewMatrix(glm::mat4(1.0f));
+		camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
+		glm::mat4 mvp = camera.GetMVPMatrix(missile.GetWorldMatrix());
+
+		missileTexture.Bind();
+
+		missileShader.Bind();
+
+		missileShader.SetUniformMat4f("mvp", mvp);
+		renderer.Draw(missileVA, missileIB, missileShader);
 		
 
 		

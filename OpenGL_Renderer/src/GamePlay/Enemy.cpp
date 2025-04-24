@@ -2,7 +2,17 @@
 #include "Enemy.h"
 
 Enemy::Enemy(glm::vec3 position, float speed)
-	: _position(position), _speed(speed)
+	: _position(position), _speed(speed),
+	Vertices
+	{
+		-0.25f, -0.25f, 0.0f, 0.0f, // 0
+		0.25f, -0.25f, 1.0f, 0.0f, // 1
+		0.0f,  0.25f, 0.5f, 1.0f, // 2
+	},
+	Indices
+   {
+		0, 2, 1
+   }
 {
 	transform.position = _position;
 	
@@ -46,4 +56,14 @@ glm::vec3 Enemy::GetPosition() const
 glm::mat4& Enemy::GetRotation()
 {
 	return transform.worldMatrix;
+}
+
+float* Enemy::GetVertices()
+{
+	return Vertices;
+}
+
+unsigned int* Enemy::GetIndices()
+{
+	return Indices;
 }

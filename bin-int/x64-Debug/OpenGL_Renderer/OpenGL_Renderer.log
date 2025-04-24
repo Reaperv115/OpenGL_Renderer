@@ -1,3 +1,6 @@
 ﻿  Scanning sources for module dependencies...
+  Missile.cpp
+  Player.cpp
   Main.cpp
+  Generating Code...
   OpenGL_Renderer.vcxproj -> C:\Dev\OpenGL_Renderer\bin\x64-Debug\OpenGL_Renderer\OpenGL_Renderer.exe

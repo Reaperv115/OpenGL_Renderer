@@ -14,6 +14,7 @@ private:
 	std::unordered_map<std::string, int> uniformlocationCache;
 public:
 	Shader(const std::string& filepath);
+	Shader();
 	~Shader();
 
 	void Bind() const;
@@ -24,6 +25,7 @@ public:
 	void SetUniform1f(const std::string& name, float value);
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
+	void LoadShader(const std::string& filepath);
 private:
 	ShaderProgramSource ParseShader(const std::string& filepath);
 	unsigned int CreateShader(const std::string& vertexshader, const std::string& fragmentShader);
