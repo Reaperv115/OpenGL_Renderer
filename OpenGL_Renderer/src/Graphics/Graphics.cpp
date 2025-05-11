@@ -2,6 +2,14 @@
 #include "Graphics.h"
 
 
+Graphics::Graphics(float width, float height, const std::string& windowName)
+	: _width(width), _height(height)
+{
+
+	
+
+}
+
 Graphics::Graphics()
 {
 
@@ -22,13 +30,12 @@ int Graphics::InitializeOpenGL(float width, float height, const std::string& win
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	window = glfwCreateWindow(width, height, windowName.c_str(), NULL, NULL);
 
-	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(width, height, "2D Engine", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
-		return -1;
+		std::cout << "Failed to initialize window" << std::endl;
 	}
 
 	/* Make the window's context current */
@@ -49,10 +56,6 @@ int Graphics::InitializeOpenGL(float width, float height, const std::string& win
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init();
 	ImGui::StyleColorsDark();
-	
-
-
-	
 }
 
 GLFWwindow* Graphics::GetWindow() const

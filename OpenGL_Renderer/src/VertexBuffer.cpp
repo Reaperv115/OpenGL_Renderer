@@ -1,6 +1,6 @@
 #include "oglrpch.h"
 #include "VertexBuffer.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)
@@ -8,6 +8,11 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 	Call(glGenBuffers(1, &vbId));
 	Call(glBindBuffer(GL_ARRAY_BUFFER, vbId));
 	Call(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+}
+
+VertexBuffer::VertexBuffer()
+{
+
 }
 
 VertexBuffer::~VertexBuffer()
@@ -23,4 +28,11 @@ void VertexBuffer::Bind() const
 void VertexBuffer::Unbind() const
 {
 	Call(glBindBuffer(GL_ARRAY_BUFFER, 0));
+}
+
+void VertexBuffer::CreateBuffer(const void* data, unsigned int size)
+{
+	Call(glGenBuffers(1, &vbId));
+	Call(glBindBuffer(GL_ARRAY_BUFFER, vbId));
+	Call(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 }

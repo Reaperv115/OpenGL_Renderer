@@ -1,8 +1,9 @@
 #pragma once
-#include "Renderer.h"
+
 class Graphics
 {
 public:
+	Graphics(float width, float height, const std::string& windowName);
 	Graphics();
 	~Graphics();
 

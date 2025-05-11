@@ -1,65 +1,32 @@
 #include "oglrpch.h"
 #include "Player.h"
 
-Player::Player(float speed, glm::vec3 position)
-	: _speed(speed), _position(position),
-	playerVertices
-	{ -0.25f, -0.25f, 0.0f, 0.0f, // 0
-		0.25f, -0.25f, 1.0f, 0.0f, // 1
-		0.0f,  0.25f, 0.5f, 1.0f, // 2
-	},
-	playerIndices
-   {
-	0, 1, 2
-   }
-{
-	transform.position = _position;
-}
 Player::Player()
 {
 
 }
 
+Player::Player(float speed)
+	: _speed(speed)
+{
+}
 
 Player::~Player()
 {
 
 }
 
-glm::vec3 Player::GetPosition() const
+void Player::Init(const std::string& filepath)
 {
-	return transform.position;
+	LoadAssets(filepath);
 }
 
-glm::mat4& Player::GetworldMatrix()
+void Player::Update(Timer timer)
 {
-	return transform.worldMatrix;
+	std::cout << timer.GetSeconds() << std::endl;
 }
 
-float Player::GetSpeed() const
+void Player::LoadAssets(const std::string& filepath)
 {
-	return _speed;
+	shipTexture = Texture2D::CreateTexture(filepath);
 }
-
-
-float* Player::GetPlayerVertices()
-{
-	return playerVertices;
-}
-
-unsigned int* Player::GetPlayerIndices()
-{
-	return playerIndices;
-}
-
-void Player::SetSpeed(float speed)
-{
-	_speed = speed;
-}
-
-void Player::MovePlayer(float dt)
-{
-	transform.position.x += _speed * dt;
-}
-
-

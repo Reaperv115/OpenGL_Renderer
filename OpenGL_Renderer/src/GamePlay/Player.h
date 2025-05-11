@@ -1,37 +1,21 @@
 #pragma once
-#include "Transform.h"
-#include "Missile.h"
-#include "Camera.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "Shapes.h"
+#include "Platform/Textures/Texture2D.h"
 
-	class Player
-	{
-	public:
-		Player();
-		Player(float speed, glm::vec3 position);
-		~Player();
+class Player
+{
+public:
+	Player(float speed);
+	Player();
+	~Player();
 
-		glm::vec3 GetPosition() const;
-		glm::mat4& GetworldMatrix();
-		float GetSpeed() const;
-		float* GetPlayerVertices();
-		unsigned int* GetPlayerIndices();
+	void Init(const std::string& filepath);
+	void Update(Timer timer);
 
-		void SetSpeed(float speed);
-		void MovePlayer(float dt);
+	void LoadAssets(const std::string& filepath);
 
-	private:
-		Transform transform;
-		Missile* missile;
-		Camera camera;
-		Shader shader;
-		Texture texture;
-
-		glm::vec3 _position;
-		float _speed;
-		float playerVertices[12];
-		unsigned int playerIndices[3];
-	};
-
-
+private:
+	glm::vec2 position;
+	float _speed;
+	Texture* shipTexture;
+};

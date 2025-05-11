@@ -549,6 +549,8 @@
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.43.34808\\include\\iomanip",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.43.34808\\include\\optional",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.43.34808\\include\\xsmf_control.h",
+            "c:\\dev\\opengl_renderer\\opengl_renderer\\src\\errorlogging.h",
+            "c:\\dev\\opengl_renderer\\opengl_renderer\\src\\timer.h",
             "c:\\dev\\opengl_renderer\\opengl_renderer\\src\\vendor\\glm\\ext.hpp",
             "c:\\dev\\opengl_renderer\\opengl_renderer\\src\\vendor\\glm\\detail\\setup.hpp",
             "c:\\dev\\opengl_renderer\\opengl_renderer\\src\\vendor\\glm\\ext\\matrix_common.hpp",

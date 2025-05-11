@@ -1,6 +1,6 @@
 #include "oglrpch.h"
 #include "VertexArray.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 #include "VertexBufferLayout.h"
 
 VertexArray::VertexArray()
@@ -28,6 +28,12 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 	}
 }
 
+void VertexArray::AddBuffer(const IndexBuffer& ib)
+{
+	Bind();
+	ib.Bind();
+}
+
 void VertexArray::Bind() const
 {
 	Call(glBindVertexArray(id));
@@ -37,3 +43,4 @@ void VertexArray::Unbind() const
 {
 	Call(glBindVertexArray(0));
 }
+
