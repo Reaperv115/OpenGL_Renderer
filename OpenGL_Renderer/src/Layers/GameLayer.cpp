@@ -9,6 +9,7 @@ GameLayer::GameLayer()
 void GameLayer::OnAttach()
 {
 	level = new Level();
+	level->Init();
 }
 
 void GameLayer::OnDetach()
@@ -23,9 +24,6 @@ void GameLayer::InitGameLayer()
 void GameLayer::OnUpdate(Timer timer)
 {
 	level->Update(timer);
-}
 
-void GameLayer::Draw()
-{
-
+	level->Render();
 }

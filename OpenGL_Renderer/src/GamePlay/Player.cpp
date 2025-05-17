@@ -7,7 +7,6 @@ Player::Player()
 }
 
 Player::Player(float speed)
-	: _speed(speed)
 {
 }
 
@@ -23,10 +22,15 @@ void Player::Init(const std::string& filepath)
 
 void Player::Update(Timer timer)
 {
-	std::cout << timer.GetSeconds() << std::endl;
+	std::cout << "updating player" << std::endl;
+}
+
+void Player::Render()
+{
+	Renderer::DrawTriangle();
 }
 
 void Player::LoadAssets(const std::string& filepath)
 {
-	shipTexture = Texture2D::CreateTexture(filepath);
+	shipTexture = new Texture(filepath);
 }

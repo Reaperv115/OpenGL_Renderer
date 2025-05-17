@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -145,16 +145,15 @@
     <ClCompile Include="src\Layers\GameLayer.cpp" />
     <ClCompile Include="src\Layers\Layer.cpp" />
     <ClCompile Include="src\ErrorLogging.cpp" />
-    <ClCompile Include="src\GamePlay\Level.cpp" />
-    <ClCompile Include="src\GamePlay\Player.cpp" />
+    <ClCompile Include="src\Gameplay\Level.cpp" />
+    <ClCompile Include="src\Gameplay\Player.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
     <ClCompile Include="src\oglrpch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">oglrpch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Platform\Textures\Texture2D.cpp" />
-    <ClCompile Include="src\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="src\Camera\Camera.cpp" />
+    <ClCompile Include="src\Textures\Texture.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
@@ -187,7 +186,6 @@
     </ClCompile>
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\Player.shader" />
@@ -335,17 +333,14 @@
     <ClInclude Include="src\Layers\GameLayer.h" />
     <ClInclude Include="src\Layers\Layer.h" />
     <ClInclude Include="src\ErrorLogging.h" />
-    <ClInclude Include="src\GamePlay\Level.h" />
-    <ClInclude Include="src\GamePlay\Player.h" />
+    <ClInclude Include="src\Gameplay\Level.h" />
+    <ClInclude Include="src\Gameplay\Player.h" />
     <ClInclude Include="src\Graphics\Graphics.h" />
     <ClInclude Include="src\oglrpch.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Platform\Textures\Texture2D.h" />
-    <ClInclude Include="src\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
-    <ClInclude Include="src\Shapes.h" />
     <ClInclude Include="src\Timer.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
@@ -649,7 +644,7 @@
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBufferLayout.h" />
-    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Textures\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\vendor\glm\copying.txt" />

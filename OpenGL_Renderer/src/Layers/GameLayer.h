@@ -12,7 +12,6 @@ public:
 	void OnUpdate(Timer timer) override;
 
 	void InitGameLayer();
-	void Draw();
 
 private:
 	Level* level;

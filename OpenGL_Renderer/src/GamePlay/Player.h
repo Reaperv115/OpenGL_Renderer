@@ -1,6 +1,5 @@
 #pragma once
-#include "Shapes.h"
-#include "Platform/Textures/Texture2D.h"
+#include "Renderer/Renderer.h"
 
 class Player
 {
@@ -11,11 +10,10 @@ public:
 
 	void Init(const std::string& filepath);
 	void Update(Timer timer);
+	void Render();
 
 	void LoadAssets(const std::string& filepath);
 
 private:
-	glm::vec2 position;
-	float _speed;
 	Texture* shipTexture;
 };

@@ -1,17 +1,14 @@
 #pragma once
-#include "VertexArray.h"
-#include "IndexBuffer.h"
-#include "VertexBufferLayout.h"
-#include "Texture.h"
+#include "Timer.h"
 #include "../Graphics/Graphics.h"
-#include "Camera.h"
+#include "Camera/Camera.h"
+#include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
 #include "Shader.h"
+#include "Textures/Texture.h"
 #include "Transform.h"
-#include "Shapes.h"
-#include "GamePlay/Player.h"
-
-
-
 
 class Renderer
 {
@@ -19,20 +16,44 @@ public:
 	Renderer(float width, float height, const std::string& windowname);
 	void Clear();
 	void PrepareScene();
-	void Update(float dt);
-	void Draw();
+	void Update(Timer timer);
 	std::shared_ptr<Graphics> GetGFX();
+
+	static void DrawTriangle();
 private:
 	std::shared_ptr<Graphics> gfx;
 	void Init(float width, float height, const std::string& windowname);
-	void DrawQuad();
-	Player player;
+	void InitializeGeometry();
+	void PrepareGemoetry();
 protected:
 	Camera camera;
-	std::shared_ptr<VertexArray> vertexArray;
-	std::shared_ptr<VertexBuffer> vertexBuffer;
-	std::shared_ptr<VertexBufferLayout> vbl;
-	std::shared_ptr<IndexBuffer> indexBuffer;
 	glm::mat4 mvp;
 
 };
+
+
+struct Square
+{
+	std::shared_ptr<VertexArray> va;
+	std::shared_ptr<VertexBuffer> vb;
+	std::shared_ptr<IndexBuffer> ib;
+	std::shared_ptr<Shader> shader;
+	std::shared_ptr<Texture> texture;
+	std::shared_ptr<VertexBufferLayout> vbl;
+	Transform transform;
+
+	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+}; static Square square;
+
+struct Triangle
+{
+	std::shared_ptr<VertexArray> va;
+	std::shared_ptr<VertexBuffer> vb;
+	std::shared_ptr<IndexBuffer> ib;
+	std::shared_ptr<Shader> shader;
+	std::shared_ptr<Texture> texture;
+	std::shared_ptr<VertexBufferLayout> vbl;
+	Transform transform;
+
+	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+}; static Triangle triangle;

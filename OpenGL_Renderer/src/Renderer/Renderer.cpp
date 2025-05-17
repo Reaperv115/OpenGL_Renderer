@@ -9,62 +9,77 @@
 Renderer::Renderer(float width, float height, const std::string& windowname)
 {
 	gfx = std::make_shared<Graphics>();
-	gfx->InitializeOpenGL(width, height, windowname);
+	Init(width, height, windowname);
+	std::cout << "Initializing Renderer!" << std::endl;
+	PrepareScene();
 }
 
 void Renderer::Init(float width, float height, const std::string& windowname)
 {
-	
+	gfx->InitializeOpenGL(width, height, windowname);}
 
-	
-	vbl = std::make_shared<VertexBufferLayout>();
+void Renderer::InitializeGeometry()
+{
+	triangle.va = std::make_shared<VertexArray>();
+	triangle.vb = std::make_shared<VertexBuffer>();
+	triangle.ib = std::make_shared<IndexBuffer>();
+	triangle.shader = std::make_shared<Shader>();
+	triangle.texture = std::make_shared<Texture>();
+	triangle.vbl = std::make_shared<VertexBufferLayout>();
+	triangle.color = glm::vec3(0.0f, 0.0f, 1.0f);
 
-	square = new Square();
-	square->va = new VertexArray();
-	square->texture = new Texture();
-	square->shader = new Shader();
+	square.va = std::make_shared<VertexArray>();
+	square.vb = std::make_shared<VertexBuffer>();
+	square.ib = std::make_shared<IndexBuffer>();
+	square.shader = std::make_shared<Shader>();
+	square.texture = std::make_shared<Texture>();
+	square.vbl = std::make_shared<VertexBufferLayout>();
+	square.color = glm::vec3(0.0f, 0.0f, 1.0f);
+}
 
-	float squareVertices[5 * 3] = {
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.0f,  0.5f, 0.0f, 0.5f, 1.0f
+void Renderer::PrepareGemoetry()
+{
+	float triangleVerts[] =
+	{
+		-0.25f, -0.25f, 0.0f, 0.0f, 0.0f,
+		0.25f, -0.25f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.25f, 0.0f, 0.5f, 1.0f
 	};
-	vertexBuffer = std::make_shared<VertexBuffer>(squareVertices, sizeof(squareVertices));
-	vbl->Push<float>(3);
-	vbl->Push<float>(2);
-	square->va->AddBuffer(*vertexBuffer, *vbl);
+	triangle.va->Bind();
+	triangle.vb->CreateBuffer(triangleVerts, 3 * 5 * sizeof(float));
+	triangle.vbl->Push<float>(3);
+	triangle.vbl->Push<float>(2);
+	triangle.va->AddBuffer(*triangle.vb, *triangle.vbl);
 
-	uint32_t squareIndices[3] = { 0, 1, 2};
-	indexBuffer = std::make_shared<IndexBuffer>(squareIndices, sizeof(squareIndices));
-	square->va->AddBuffer(*indexBuffer);
-	square->va->Unbind();
+	unsigned int triangleIndices[] = { 0, 1, 2 };
+	triangle.ib->CreateBuffer(triangleIndices, 3);
+	triangle.va->AddBuffer(*triangle.ib);
 
-	//square->texture->LoadTexture("src/textures/other player.png");
-
-	square->shader->LoadShader("src/Shaders/Player.shader");
-
-	square->transform.position = glm::vec3(0.0f, 0.0f, 0.0f);
+	triangle.color = glm::vec3(0.0f, 0.0f, 1.0f);
+	triangle.shader->LoadShader("src/Shaders/Player.shader");
 }
 
 void Renderer::PrepareScene()
 {
-	square->transform.worldMatrix = glm::translate(glm::mat4(1.0f), square->transform.position);
-	square->transform.worldMatrix = glm::scale(square->transform.worldMatrix, glm::vec3(0.25f, 0.25f, 0.0f));
+	std::cout << "Preparing Scene!" << std::endl;
+	InitializeGeometry();
+	PrepareGemoetry();
+
+	triangle.shader->Bind();
+	triangle.shader->SetUniform4f("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
+	triangle.transform.position = glm::vec3(0.0f, -2.3f, 0.0f);
+
+	triangle.transform.worldMatrix = glm::translate(glm::mat4(1.0f), triangle.transform.position);
 	camera.SetViewMatrix(glm::mat4(1.0f));
 	camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
-	mvp = camera.GetMVPMatrix(square->transform.worldMatrix);
+	mvp = camera.GetMVPMatrix(triangle.transform.worldMatrix);
 
-	square->shader->Bind();
-	square->shader->SetUniformMat4f("mvp", mvp);
-
-	square->texture->Bind();
-	square->shader->SetUniform1i("utexture", 0);
+	triangle.shader->SetUniformMat4f("mvp", mvp);
 }
 
-void Renderer::Update(float dt)
+void Renderer::Update(Timer timer)
 {
-	std::cout << dt << std::endl;
-	player.Update(dt);
+	std::cout << "Updating Renderer!" << std::endl;
 }
 
 void Renderer::Clear()
@@ -78,15 +93,7 @@ std::shared_ptr<Graphics> Renderer::GetGFX()
 	return gfx;
 }
 
-void Renderer::DrawQuad()
+void Renderer::DrawTriangle()
 {
-	square->va->Bind();
-	square->texture->Bind();
-	square->shader->Bind();
-	glDrawElements(GL_TRIANGLES, indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
-}
-
-void Renderer::Draw()
-{
-	DrawQuad();
+	Call(glDrawElements(GL_TRIANGLES, triangle.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }
