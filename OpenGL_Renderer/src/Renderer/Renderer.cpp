@@ -57,6 +57,10 @@ void Renderer::PrepareGemoetry()
 
 	triangle.color = glm::vec3(0.0f, 0.0f, 1.0f);
 	triangle.shader->LoadShader("src/Shaders/Player.shader");
+	
+
+	triangle.texture->LoadTexture("src/Assets/Textures/other player.png");
+	
 }
 
 void Renderer::PrepareScene()
@@ -64,17 +68,21 @@ void Renderer::PrepareScene()
 	std::cout << "Preparing Scene!" << std::endl;
 	InitializeGeometry();
 	PrepareGemoetry();
-
-	triangle.shader->Bind();
-	triangle.shader->SetUniform4f("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
+	
+	// assign object position
 	triangle.transform.position = glm::vec3(0.0f, -2.3f, 0.0f);
 
+	// putting object into world space
 	triangle.transform.worldMatrix = glm::translate(glm::mat4(1.0f), triangle.transform.position);
+
+	// setting up camera
 	camera.SetViewMatrix(glm::mat4(1.0f));
 	camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
 	mvp = camera.GetMVPMatrix(triangle.transform.worldMatrix);
-
+	
+	triangle.shader->Bind();
 	triangle.shader->SetUniformMat4f("mvp", mvp);
+	triangle.shader->SetUniform1i("utexture", 0);
 }
 
 void Renderer::Update(Timer timer)
@@ -95,5 +103,7 @@ std::shared_ptr<Graphics> Renderer::GetGFX()
 
 void Renderer::DrawTriangle()
 {
+	triangle.va->Bind();
+	triangle.texture->Bind();
 	Call(glDrawElements(GL_TRIANGLES, triangle.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }

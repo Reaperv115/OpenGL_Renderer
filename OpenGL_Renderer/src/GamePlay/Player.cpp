@@ -22,7 +22,6 @@ void Player::Init(const std::string& filepath)
 
 void Player::Update(Timer timer)
 {
-	std::cout << "updating player" << std::endl;
 }
 
 void Player::Render()

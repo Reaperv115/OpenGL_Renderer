@@ -19,6 +19,8 @@ public:
 	void Bind(unsigned int slot = 0) const;
 	void Unbind() const;
 
+	void LoadTexture(const std::string& filepath);
+
 	inline int GetWidth() const { return width; }
 	inline int GetHeight() const { return height; }
 
