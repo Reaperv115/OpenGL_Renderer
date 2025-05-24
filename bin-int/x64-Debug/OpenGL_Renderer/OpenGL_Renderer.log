@@ -1,3 +1,19 @@
 ﻿  Scanning sources for module dependencies...
+  Level.cpp
+  Player.cpp
+  Graphics.cpp
+  GameLayer.cpp
+  Main.cpp
+  IndexBuffer.cpp
   Renderer.cpp
+  Shader.cpp
+  VertexArray.cpp
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer\VertexArray.cpp(27,3): warning C4312: 'type cast': conversion from 'unsigned int' to 'const void *' of greater size
+  (compiling source file '/src/Renderer/VertexArray.cpp')
+  
+  VertexBuffer.cpp
+  Generating Code...
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Dev\OpenGL_Renderer\bin\x64-Debug\OpenGL_Renderer\vc120.pdb'; linking object as if no debug info
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   OpenGL_Renderer.vcxproj -> C:\Dev\OpenGL_Renderer\bin\x64-Debug\OpenGL_Renderer\OpenGL_Renderer.exe

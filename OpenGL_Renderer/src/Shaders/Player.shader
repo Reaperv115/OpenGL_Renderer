@@ -7,6 +7,7 @@ layout(location = 1) in vec2 texCoord;
 out vec2 vtexCoord;
 
 uniform mat4 mvp;
+uniform mat4 transform;
 
 void main()
 {

@@ -18,10 +18,14 @@ Player::~Player()
 void Player::Init(const std::string& filepath)
 {
 	LoadAssets(filepath);
+	position = glm::vec3(0.0f, -2.3f, 0.0f);
+	speed = 5.0f;
 }
 
-void Player::Update(Timer timer)
+void Player::Update(Timer timer, double xpos, double ypos)
 {
+	std::cout << "XPos: " << xpos << '\n' <<
+		"YPos: " << ypos;
 }
 
 void Player::Render()

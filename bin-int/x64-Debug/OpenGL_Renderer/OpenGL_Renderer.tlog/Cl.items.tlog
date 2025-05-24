@@ -1,3 +1,4 @@
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Graphics\OpenGLContext.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\OpenGLContext.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Layers\LayerStack.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\LayerStack.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Layers\GameLayer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\GameLayer.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Layers\Layer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Layer.obj
@@ -7,9 +8,9 @@ C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Gameplay\Player.cpp;C:\Dev\OpenGL_Ren
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Graphics\Graphics.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Graphics.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\oglrpch.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\oglrpch.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Camera\Camera.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Camera.obj
-C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Textures\Texture.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Texture.obj
-C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Shader.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Shader.obj
-C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\IndexBuffer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\IndexBuffer.obj
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer\Texture.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Texture.obj
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer\Shader.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Shader.obj
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer\IndexBuffer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\IndexBuffer.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer\Renderer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Renderer.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Main.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\Main.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\vendor\glm\detail\glm.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\glm.obj
@@ -22,5 +23,5 @@ C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\vendor\imgui\imgui_impl_opengl3.cpp;C
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\vendor\imgui\imgui_tables.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\imgui_tables.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\vendor\imgui\imgui_widgets.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\imgui_widgets.obj
 C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\vendor\stb_image\stb_image.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\stb_image.obj
-C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\VertexBuffer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\VertexBuffer.obj
-C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\VertexArray.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\VertexArray.obj
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer\VertexBuffer.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\VertexBuffer.obj
+C:\Dev\OpenGL_Renderer\OpenGL_Renderer\src\Renderer\VertexArray.cpp;C:\Dev\OpenGL_Renderer\bin-int\x64-Debug\OpenGL_Renderer\VertexArray.obj

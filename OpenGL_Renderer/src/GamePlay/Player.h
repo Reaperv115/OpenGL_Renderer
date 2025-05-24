@@ -9,11 +9,14 @@ public:
 	~Player();
 
 	void Init(const std::string& filepath);
-	void Update(Timer timer);
+	void Update(Timer timer, double xpos, double ypos);
 	void Render();
 
 	void LoadAssets(const std::string& filepath);
 
 private:
 	Texture* shipTexture;
+
+	glm::vec2 position;
+	float speed;
 };

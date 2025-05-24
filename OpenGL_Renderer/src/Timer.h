@@ -9,7 +9,7 @@ public:
 
 	}
 
-	float GetSeconds() { return _time; }
+	float GetDeltatime() { return _time; }
 	float GetMilliseconds() { return _time * 1000; }
 private:
 	float _time;

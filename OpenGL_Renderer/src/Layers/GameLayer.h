@@ -1,6 +1,7 @@
 #pragma once
 #include "Layer.h"
 #include "GamePlay/Level.h"
+#include "../Graphics/Graphics.h"
 
 class GameLayer : public Layer
 {

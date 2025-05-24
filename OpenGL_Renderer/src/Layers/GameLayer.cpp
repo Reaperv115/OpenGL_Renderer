@@ -23,7 +23,10 @@ void GameLayer::InitGameLayer()
 
 void GameLayer::OnUpdate(Timer timer)
 {
-	level->Update(timer);
+	double xPos, yPos;
+	glfwGetCursorPos(Graphics::GetContext()->GetWindow(), &xPos, &yPos);
 
+	level->Update(timer, xPos, yPos);
+	
 	level->Render();
 }

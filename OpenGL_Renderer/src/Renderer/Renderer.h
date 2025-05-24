@@ -7,19 +7,18 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
-#include "Textures/Texture.h"
-#include "Transform.h"
+#include "Texture.h"
 
 class Renderer
 {
 public:
 	Renderer(float width, float height, const std::string& windowname);
 	void Clear();
-	void PrepareScene();
-	void Update(Timer timer);
-	std::shared_ptr<Graphics> GetGFX();
+	void BeginScene();
 
+	std::shared_ptr<Graphics> GetGFX();
 	static void DrawTriangle();
+	static void DrawTriangle(glm::vec2 position);
 private:
 	std::shared_ptr<Graphics> gfx;
 	void Init(float width, float height, const std::string& windowname);
@@ -40,8 +39,8 @@ struct Square
 	std::shared_ptr<Shader> shader;
 	std::shared_ptr<Texture> texture;
 	std::shared_ptr<VertexBufferLayout> vbl;
-	Transform transform;
 
+	glm::vec2 position = glm::vec2(0.0f, -2.3f);
 	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 }; static Square square;
 
@@ -53,7 +52,9 @@ struct Triangle
 	std::shared_ptr<Shader> shader;
 	std::shared_ptr<Texture> texture;
 	std::shared_ptr<VertexBufferLayout> vbl;
-	Transform transform;
 
 	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec2 position = glm::vec2(0.0f, 0.0f);
+
+	glm::mat4 worldMatrix;
 }; static Triangle triangle;

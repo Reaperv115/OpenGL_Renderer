@@ -1,4 +1,5 @@
 #pragma once
+#include "OpenGLContext.h"
 
 class Graphics
 {
@@ -9,10 +10,9 @@ public:
 
 	int InitializeOpenGL(float width, float height, const std::string& windowName);
 
-	GLFWwindow* GetWindow() const;
+	static inline OpenGLContext* GetContext() { return context; }
 private:
-	GLFWwindow* window;
-	const char* glsl_version = "#version 300 es";
+	static OpenGLContext* context;
 	float _width, _height;
+	
 };
-

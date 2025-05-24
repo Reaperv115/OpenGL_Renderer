@@ -11,7 +11,7 @@ Renderer::Renderer(float width, float height, const std::string& windowname)
 	gfx = std::make_shared<Graphics>();
 	Init(width, height, windowname);
 	std::cout << "Initializing Renderer!" << std::endl;
-	PrepareScene();
+	BeginScene();
 }
 
 void Renderer::Init(float width, float height, const std::string& windowname)
@@ -41,13 +41,13 @@ void Renderer::PrepareGemoetry()
 {
 	float triangleVerts[] =
 	{
-		-0.25f, -0.25f, 0.0f, 0.0f, 0.0f,
-		0.25f, -0.25f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.25f, 0.0f, 0.5f, 1.0f
+		-0.25f, -0.25f, 0.0f, 0.0f,
+		0.25f, -0.25f, 1.0f, 0.0f,
+		0.0f, 0.25f, 0.5f, 1.0f
 	};
 	triangle.va->Bind();
-	triangle.vb->CreateBuffer(triangleVerts, 3 * 5 * sizeof(float));
-	triangle.vbl->Push<float>(3);
+	triangle.vb->CreateBuffer(triangleVerts, 3 * 4 * sizeof(float));
+	triangle.vbl->Push<float>(2);
 	triangle.vbl->Push<float>(2);
 	triangle.va->AddBuffer(*triangle.vb, *triangle.vbl);
 
@@ -63,31 +63,23 @@ void Renderer::PrepareGemoetry()
 	
 }
 
-void Renderer::PrepareScene()
+void Renderer::BeginScene()
 {
 	std::cout << "Preparing Scene!" << std::endl;
 	InitializeGeometry();
 	PrepareGemoetry();
-	
-	// assign object position
-	triangle.transform.position = glm::vec3(0.0f, -2.3f, 0.0f);
 
 	// putting object into world space
-	triangle.transform.worldMatrix = glm::translate(glm::mat4(1.0f), triangle.transform.position);
+	triangle.worldMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(triangle.position, 0.0f));
 
 	// setting up camera
 	camera.SetViewMatrix(glm::mat4(1.0f));
 	camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
-	mvp = camera.GetMVPMatrix(triangle.transform.worldMatrix);
+	mvp = camera.GetMVPMatrix(triangle.worldMatrix);
 	
 	triangle.shader->Bind();
 	triangle.shader->SetUniformMat4f("mvp", mvp);
 	triangle.shader->SetUniform1i("utexture", 0);
-}
-
-void Renderer::Update(Timer timer)
-{
-	std::cout << "Updating Renderer!" << std::endl;
 }
 
 void Renderer::Clear()
@@ -106,4 +98,10 @@ void Renderer::DrawTriangle()
 	triangle.va->Bind();
 	triangle.texture->Bind();
 	Call(glDrawElements(GL_TRIANGLES, triangle.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+}
+
+void Renderer::DrawTriangle(glm::vec2 position)
+{
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
+
 }
