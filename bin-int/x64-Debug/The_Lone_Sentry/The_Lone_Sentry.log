@@ -1,0 +1,53 @@
+﻿  Scanning sources for module dependencies...
+  glm.cppm
+  Compiling...
+  oglrpch.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\shared\minwindef.h(130,9): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'src/oglrpch.cpp')
+      C:\Dev\The_Lone_Sentry\Dependencies\GLFW\include\GLFW\glfw3.h(123,11):
+      see previous definition of 'APIENTRY'
+  
+  glm.cppm
+C:\Dev\The_Lone_Sentry\The_Lone_Sentry\src\vendor\glm\glm.cppm(9,18): warning C5201: a module declaration can appear only at the start of a translation unit unless a global module fragment is used
+  (compiling source file '/src/vendor/glm/glm.cppm')
+  
+  OpenGLContext.cpp
+C:\Dev\The_Lone_Sentry\The_Lone_Sentry\src\Graphics\OpenGLContext.cpp(30,35): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  (compiling source file '/src/Graphics/OpenGLContext.cpp')
+  
+C:\Dev\The_Lone_Sentry\The_Lone_Sentry\src\Graphics\OpenGLContext.cpp(30,28): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  (compiling source file '/src/Graphics/OpenGLContext.cpp')
+  
+  LayerStack.cpp
+  GameLayer.cpp
+  Layer.cpp
+  ErrorLogging.cpp
+  Level.cpp
+  Player.cpp
+  Graphics.cpp
+  Camera.cpp
+  Texture.cpp
+  Shader.cpp
+  IndexBuffer.cpp
+  Renderer.cpp
+  Main.cpp
+  glm.cpp
+  VertexBuffer.cpp
+  VertexArray.cpp
+C:\Dev\The_Lone_Sentry\The_Lone_Sentry\src\Renderer\VertexArray.cpp(27,3): warning C4312: 'type cast': conversion from 'unsigned int' to 'const void *' of greater size
+  (compiling source file '/src/Renderer/VertexArray.cpp')
+  
+  Generating Code...
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  stb_image.cpp
+  Generating Code...
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Dev\The_Lone_Sentry\bin\x64-Debug\The_Lone_Sentry\vc120.pdb'; linking object as if no debug info
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  The_Lone_Sentry.vcxproj -> C:\Dev\The_Lone_Sentry\bin\x64-Debug\The_Lone_Sentry\The_Lone_Sentry.exe

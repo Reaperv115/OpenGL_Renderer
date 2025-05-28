@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "C:\\Dev\\The_Lone_Sentry\\bin-int\\x64-Debug\\The_Lone_Sentry\\glm.cppm.obj",
+            "outputs": [
+                "C:\\Dev\\The_Lone_Sentry\\bin-int\\x64-Debug\\The_Lone_Sentry\\vc143.pdb",
+                "C:\\Dev\\The_Lone_Sentry\\bin-int\\x64-Debug\\The_Lone_Sentry\\",
+                "C:\\Dev\\The_Lone_Sentry\\bin-int\\x64-Debug\\The_Lone_Sentry\\glm.cppm.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "glm",
+                    "source-path": "c:\\dev\\the_lone_sentry\\the_lone_sentry\\src\\vendor\\glm\\glm.cppm",
+                    "is-interface": true
+                }
+            ],
+            "requires": []
+        }
+    ]
+}
