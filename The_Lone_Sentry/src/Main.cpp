@@ -21,6 +21,7 @@ int main(void)
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(renderer->GetGFX()->GetContext()->GetWindow()))
 	{
+		renderer->Clear();
 		Timer timer = deltaTime - prevTime;
 		prevTime = deltaTime;
 		deltaTime = (float)glfwGetTime();

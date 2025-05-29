@@ -16,9 +16,9 @@ void Level::Init()
 	player.Init("src/Textures/other player.png");
 }
 
-void Level::Update(Timer timer, double xpos, double ypos)
+void Level::Update(Timer timer)
 {
-	player.Update(timer, xpos, ypos);
+	player.Update(timer);
 }
 
 void Level::Render()

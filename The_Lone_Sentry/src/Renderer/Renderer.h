@@ -18,7 +18,7 @@ public:
 
 	std::shared_ptr<Graphics> GetGFX();
 	static void DrawTriangle();
-	static void DrawTriangle(glm::vec2 position, glm::mat4 rotation);
+	static void DrawTriangle(glm::vec2 position, float rotation);
 	static void DrawTriangle(glm::vec2 position);
 private:
 	std::shared_ptr<Graphics> gfx;

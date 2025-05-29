@@ -79,12 +79,13 @@ void Renderer::BeginScene()
 	triangle->shader->Bind();
 	triangle->shader->SetUniformMat4f("mvp", mvp);
 	triangle->shader->SetUniform1i("utexture", 0);
+	triangle->shader->SetUniform4f("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void Renderer::Clear()
 {
 	Call(glClear(GL_COLOR_BUFFER_BIT));
-	Call(glClearColor(0.0f, 0.0f, 1.0f, 1.0f));
+	Call(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
 std::shared_ptr<Graphics> Renderer::GetGFX()
@@ -99,10 +100,12 @@ void Renderer::DrawTriangle()
 	Call(glDrawElements(GL_TRIANGLES, triangle->ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }
 
-void Renderer::DrawTriangle(glm::vec2 position, glm::mat4 rotation)
+void Renderer::DrawTriangle(glm::vec2 position,  float rotation)
 {
-	glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f)) * rotation;
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f))
+		* glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 	triangle->shader->SetUniformMat4f("transform", transform);
+	triangle->shader->SetUniform4f("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
 	triangle->va->Bind();
 	triangle->texture->Bind();
 	Call(glDrawElements(GL_TRIANGLES, triangle->ib->GetCount(), GL_UNSIGNED_INT, nullptr));

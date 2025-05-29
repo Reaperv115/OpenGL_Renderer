@@ -8,7 +8,7 @@ public:
 	~Level();
 
 	void Init();
-	void Update(Timer timer, double xpos, double ypos);
+	void Update(Timer timer);
 	void Render();
 
 private:
