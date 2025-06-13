@@ -5,8 +5,11 @@
 #include "Graphics/Graphics.h"
 
 
+
 int main(void)
 {  
+	
+
 	Renderer* renderer = new Renderer(screen_width, screen_height, "2D Engine");
 
 	LayerStack layerstack;
@@ -16,7 +19,6 @@ int main(void)
 	float deltaTime = (float)glfwGetTime();
 	float prevTime = 0.0f;
 
-	
 	
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(renderer->GetGFX()->GetContext()->GetWindow()))
@@ -43,3 +45,4 @@ int main(void)
 	glfwTerminate();
 	return 0;
 }
+

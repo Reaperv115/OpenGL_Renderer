@@ -10,15 +10,20 @@ public:
 	Camera();
 	~Camera();
 
-	glm::mat4 GetMVPMatrix(const glm::mat4 worldmat) const;
-	glm::mat4 GetViewMatrix();
 	void SetViewMatrix(glm::mat4 mat);
 	virtual void SetProjectionMatrix(glm::mat4 mat);
 
+	static glm::mat4 GetMVP(glm::mat4 worldmat);
+	static glm::mat4 GetViewMatrix();
+	static glm::mat4 GetProjectionMatrix();
+	glm::vec3 GetPosition() { return position; }
+
 	glm::mat4 CreateOrthoCamera(float left, float right, float bottom, float top, float nearz, float farz);
 	glm::mat4 CreatePerspectiveCamera(float fov, float width, float height, float nearz, float farz);
-protected:
-	glm::mat4 viewMatrix;
-	glm::mat4 projectionMatrix;
+private:
+	static glm::mat4 viewMatrix;
+	static glm::mat4 projectionMatrix;
 	glm::mat4 mvp;
+
+	static glm::vec3 position;
 };

@@ -13,7 +13,7 @@ Level::~Level()
 
 void Level::Init()
 {
-	player.Init("src/Textures/other player.png");
+	player.Init("src/Assets/Textures/other player.png");
 }
 
 void Level::Update(Timer timer)
@@ -24,4 +24,5 @@ void Level::Update(Timer timer)
 void Level::Render()
 {
 	player.Render();
+	
 }

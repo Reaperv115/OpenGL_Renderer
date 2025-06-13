@@ -37,6 +37,7 @@ int Graphics::InitializeOpenGL(float width, float height, const std::string& win
 	Call(glEnable(GL_BLEND));
 	Call(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(context->GetWindow(), true);

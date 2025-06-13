@@ -18,31 +18,32 @@ Player::~Player()
 void Player::Init(const std::string& filepath)
 {
 	LoadAssets(filepath);
-	position = glm::vec2(0.0f, 0.0f);
-	speed = 5.0f;
 }
 
 void Player::Update(Timer timer)
 {
-	glfwGetCursorPos(Graphics::GetContext()->GetWindow(), &xPos, &yPos);
+	if (GetAsyncKeyState('A'))
+		position.x -= speed * timer.GetDeltatime();
+	if (GetAsyncKeyState('D'))
+		position.x += speed * timer.GetDeltatime();
 
-	double newxPos = xPos - prevxPos;
-	double newyPos = yPos - prevyPos;
+	if (position.x <= -2.5f)
+		position.x = -2.5f;
+	if (position.x > 2.5f)
+		position.x = 2.5f;
 
 
-	angle = atan2(newxPos, newyPos);
-	rotation += angle;
-
-	prevxPos = xPos;
-	prevyPos = yPos;
-
-	std::cout << "Angle: " << angle << std::endl;
+	if (GetAsyncKeyState(VK_LBUTTON))
+	{
+		std::cout << "firing weapon" << std::endl;
+	}
 
 }
 
 void Player::Render()
 {
-	Renderer::DrawTriangle(position, glm::radians(rotation));
+	Renderer::DrawTriangle(position, shipTexture);
+	
 }
 
 void Player::LoadAssets(const std::string& filepath)

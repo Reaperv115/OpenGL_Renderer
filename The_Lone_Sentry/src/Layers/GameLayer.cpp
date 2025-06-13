@@ -23,9 +23,6 @@ void GameLayer::InitGameLayer()
 
 void GameLayer::OnUpdate(Timer timer)
 {
-	
-	
-
 	level->Update(timer);
 	
 	level->Render();

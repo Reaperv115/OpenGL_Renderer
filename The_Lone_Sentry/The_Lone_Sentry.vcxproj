@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Gameplay\Missile.cpp" />
     <ClCompile Include="src\Graphics\OpenGLContext.cpp" />
     <ClCompile Include="src\Layers\LayerStack.cpp" />
     <ClCompile Include="src\Layers\GameLayer.cpp" />
@@ -190,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\Player.shader" />
+    <None Include="src\Shaders\PlayerTexture.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
@@ -330,6 +332,7 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Gameplay\Missile.h" />
     <ClInclude Include="src\Graphics\OpenGLContext.h" />
     <ClInclude Include="src\Layers\LayerStack.h" />
     <ClInclude Include="src\Layers\GameLayer.h" />

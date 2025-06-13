@@ -16,25 +16,28 @@ Renderer::Renderer(float width, float height, const std::string& windowname)
 
 void Renderer::Init(float width, float height, const std::string& windowname)
 {
-	gfx->InitializeOpenGL(width, height, windowname);}
+	gfx->InitializeOpenGL(width, height, windowname);
+}
 
 void Renderer::InitializeGeometry()
 {
-	triangle = new Triangle(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f));
+	triangle = new Triangle();
 	triangle->va = std::make_shared<VertexArray>();
 	triangle->vb = std::make_shared<VertexBuffer>();
 	triangle->ib = std::make_shared<IndexBuffer>();
 	triangle->vbl = std::make_shared<VertexBufferLayout>();
-	triangle->shader = std::make_shared<Shader>();
+	triangle->TextureShader = std::make_shared<Shader>();
+	triangle->colorShader = std::make_shared<Shader>();
 	triangle->texture = std::make_shared<Texture>();
 
-	square.va = std::make_shared<VertexArray>();
-	square.vb = std::make_shared<VertexBuffer>();
-	square.ib = std::make_shared<IndexBuffer>();
-	square.shader = std::make_shared<Shader>();
-	square.texture = std::make_shared<Texture>();
-	square.vbl = std::make_shared<VertexBufferLayout>();
-	square.color = glm::vec3(0.0f, 0.0f, 1.0f);
+	square = new Square();
+	square->va = std::make_shared<VertexArray>();
+	square->vb = std::make_shared<VertexBuffer>();
+	square->ib = std::make_shared<IndexBuffer>();
+	square->colorShader = std::make_shared<Shader>();
+	square->textureShader = std::make_shared<Shader>();
+	square->texture = std::make_shared<Texture>();
+	square->vbl = std::make_shared<VertexBufferLayout>();
 }
 
 void Renderer::PrepareGemoetry()
@@ -43,7 +46,7 @@ void Renderer::PrepareGemoetry()
 	{
 		-0.25f, -0.25f, 0.0f, 0.0f,
 		0.25f, -0.25f, 1.0f, 0.0f,
-		0.0f, 0.25f, 0.5f, 1.0f
+		0.0f, 0.25f, 0.5f, 1.0f,
 	};
 	triangle->va->Bind();
 	triangle->vb->CreateBuffer(triangleVerts, 3 * 4 * sizeof(float));
@@ -51,14 +54,36 @@ void Renderer::PrepareGemoetry()
 	triangle->vbl->Push<float>(2);
 	triangle->va->AddBuffer(*triangle->vb, *triangle->vbl);
 
-	unsigned int triangleIndices[] = { 0, 1, 2 };
+	unsigned int triangleIndices[] =
+	{
+		0, 1, 2
+	};
 	triangle->ib->CreateBuffer(triangleIndices, 3);
 	triangle->va->AddBuffer(*triangle->ib);
-
-	triangle->shader->LoadShader("src/Shaders/Player.shader");
 	
 
-	triangle->texture->LoadTexture("src/Assets/Textures/other player.png");
+	float squareVerts[] =
+	{
+		-0.25f, -0.25f, 0.0f, 0.0f,
+		0.25f, -0.25f, 1.0f, 0.0f,
+		0.25f, 0.25f, 1.0f, 1.0f,
+		-0.25f, 0.25f, 0.0f, 1.0f
+	};
+	square->va->Bind();
+	square->vb->CreateBuffer(squareVerts, 4 * 4 * sizeof(float));
+	square->vbl->Push<float>(2);
+	square->vbl->Push<float>(2);
+	square->va->AddBuffer(*square->vb, *square->vbl);
+
+	unsigned int squareIndices[] =
+	{
+		0, 1, 2,
+		2, 3, 0
+	};
+	square->ib->CreateBuffer(squareIndices, 6);
+	square->va->AddBuffer(*square->ib);
+
+	
 	
 }
 
@@ -68,23 +93,24 @@ void Renderer::BeginScene()
 	InitializeGeometry();
 	PrepareGemoetry();
 
-	// putting object into world space
-	triangle->worldMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(triangle->position, 0.0f));
 
 	// setting up camera
 	camera.SetViewMatrix(glm::mat4(1.0f));
-	camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f));
-	mvp = camera.GetMVPMatrix(triangle->worldMatrix);
-	
-	triangle->shader->Bind();
-	triangle->shader->SetUniformMat4f("mvp", mvp);
-	triangle->shader->SetUniform1i("utexture", 0);
-	triangle->shader->SetUniform4f("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
+	camera.SetProjectionMatrix(glm::ortho(-2.5f, 2.5f, -2.5f, 2.5f, -1.0f, 1.0f));
+
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0, -2.3f, 0));
+	glm::mat4 mvp = camera.GetMVP(transform);
+
+	triangle->TextureShader->LoadShader("src/Shaders/PLayerTexture.shader");
+	triangle->TextureShader->Bind();
+
+	triangle->TextureShader->SetUniformMat4f("mvp", mvp);
+	triangle->TextureShader->SetUniform1i("uTexture", 0);
 }
 
 void Renderer::Clear()
 {
-	Call(glClear(GL_COLOR_BUFFER_BIT));
+	Call(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	Call(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
@@ -100,22 +126,36 @@ void Renderer::DrawTriangle()
 	Call(glDrawElements(GL_TRIANGLES, triangle->ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }
 
-void Renderer::DrawTriangle(glm::vec2 position,  float rotation)
+void Renderer::DrawRectangle(glm::vec3 position)
 {
-	glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f))
-		* glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-	triangle->shader->SetUniformMat4f("transform", transform);
-	triangle->shader->SetUniform4f("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
-	triangle->va->Bind();
-	triangle->texture->Bind();
-	Call(glDrawElements(GL_TRIANGLES, triangle->ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+		* glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.0f));
+
+
+	square->colorShader->Bind();
+	square->colorShader->SetUniformMat4f("transform", transform);
+	square->va->Bind();
+	Call(glDrawElements(GL_TRIANGLES, square->ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }
 
-void Renderer::DrawTriangle(glm::vec2 position)
+void Renderer::DrawRectangle(glm::vec3 position, float rotation)
 {
-	glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
-	triangle->shader->SetUniformMat4f("transform", transform);
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0))
+		* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0, 0, 1));
+
+
+	square->textureShader->Bind();
+	square->textureShader->SetUniformMat4f("transform", transform);
+	square->textureShader->SetUniform1i("uTexture", 0);
+	square->va->Bind();
+	Call(glDrawElements(GL_TRIANGLES, square->ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+}
+
+void Renderer::DrawTriangle(glm::vec3 position, Texture* texture)
+{
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
+	texture->Bind();
+	triangle->TextureShader->SetUniformMat4f("transform", transform);
 	triangle->va->Bind();
-	triangle->texture->Bind();
 	Call(glDrawElements(GL_TRIANGLES, triangle->ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }

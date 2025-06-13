@@ -16,11 +16,8 @@ public:
 
 private:
 	Texture* shipTexture;
-	glm::vec2 position;
-	glm::mat4 rotationMatrix;
-	float speed;
-	float rotation;
-	double xPos, yPos;
-	double prevxPos, prevyPos;
-	float angle;
+	glm::vec3 position;
+	glm::vec3 rotationVector;
+	float centerX, centerY;
+	float speed = 5.0f;
 };
