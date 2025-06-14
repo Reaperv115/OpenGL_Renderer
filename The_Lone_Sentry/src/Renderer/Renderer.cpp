@@ -154,8 +154,9 @@ void Renderer::DrawRectangle(glm::vec3 position, float rotation)
 void Renderer::DrawTriangle(glm::vec3 position, Texture* texture)
 {
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
-	texture->Bind();
 	triangle->TextureShader->SetUniformMat4f("transform", transform);
+
+	texture->Bind();
 	triangle->va->Bind();
 	Call(glDrawElements(GL_TRIANGLES, triangle->ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }

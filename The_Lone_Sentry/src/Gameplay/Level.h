@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "Missile.h"
 
 class Level
 {
@@ -13,4 +14,5 @@ public:
 
 private:
 	Player player;
+	Missile* missile;
 };

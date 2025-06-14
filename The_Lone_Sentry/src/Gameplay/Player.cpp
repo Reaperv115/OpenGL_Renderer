@@ -32,10 +32,21 @@ void Player::Update(Timer timer)
 	if (position.x > 2.5f)
 		position.x = 2.5f;
 
+	if (missiles.size() == 0)
+	{ }
+	else
+	{
+		for (Missile* missile : missiles)
+		{
+			missile->OnUpdate(timer);
+		}
+	}
+
 
 	if (GetAsyncKeyState(VK_LBUTTON))
 	{
 		std::cout << "firing weapon" << std::endl;
+		missiles.push_back(new Missile("src/Assets/Textures/missile.png", position));
 	}
 
 }
@@ -43,7 +54,16 @@ void Player::Update(Timer timer)
 void Player::Render()
 {
 	Renderer::DrawTriangle(position, shipTexture);
-	
+	if (missiles.size() == 0)
+	{
+	}
+	else
+	{
+		for (Missile* missile : missiles)
+		{
+			missile->Render();
+		}
+	}
 }
 
 void Player::LoadAssets(const std::string& filepath)

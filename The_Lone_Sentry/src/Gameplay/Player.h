@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderer/Renderer.h"
+#include "Missile.h"
 
 class Player
 {
@@ -20,4 +21,5 @@ private:
 	glm::vec3 rotationVector;
 	float centerX, centerY;
 	float speed = 5.0f;
+	std::vector<Missile*> missiles;
 };
